@@ -1,18 +1,23 @@
-import { Home, Folder, FileText, Briefcase } from "lucide-react";
+import { Home } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
 const menuItems = [
   { name: "Application", icon: Home, href: "/application", role: "student" },
   { name: "Applications", icon: Home, href: "/dashboard", role: "admin" },
-  { name: "Cases", icon: Briefcase, href: "/case", role: "admin" },
-  //   { name: "Reports", icon: Folder, href: "/reports" },
 ];
 
 export default function Sidebar() {
-  const Mainrole = localStorage.getItem("role");
+  const [mainRole, setMainRole] = useState<string | null>(null);
   const router = useRouter();
-  const handleLogut = () => {
+
+  // ✅ Only access localStorage on the client
+  useEffect(() => {
+    setMainRole(localStorage.getItem("role"));
+  }, []);
+
+  const handleLogout = () => {
     localStorage.clear();
     router.push("/");
   };
@@ -27,7 +32,7 @@ export default function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-2">
         {menuItems
-          .filter(({ role }) => Mainrole === role)
+          .filter(({ role }) => mainRole === role)
           .map(({ name, icon: Icon, href }) => (
             <Link
               key={name}
@@ -44,7 +49,7 @@ export default function Sidebar() {
       <div className="p-4 border-t border-gray-800">
         <button
           className="w-full rounded-lg bg-red-600 px-3 py-2 text-sm font-medium hover:bg-red-700"
-          onClick={handleLogut}
+          onClick={handleLogout}
         >
           Logout
         </button>

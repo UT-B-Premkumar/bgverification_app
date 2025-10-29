@@ -14,10 +14,10 @@ export const loginUser = async (req: NextRequest) => {
       return NextResponse.json({ error: "Email and password required" }, { status: 400 });
     }
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+const user = await User.findOne({ email }).exec();
+if (!user?.password) {
+  return NextResponse.json({ error: "User not found or password missing" }, { status: 404 });
+}
 
     if (!user.password) {
       return NextResponse.json({ error: "User password is missing" }, { status: 500 });

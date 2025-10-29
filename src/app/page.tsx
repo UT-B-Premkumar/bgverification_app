@@ -18,7 +18,7 @@ export default function LoginPage() {
     } else {
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +73,7 @@ export default function LoginPage() {
       // ✅ Step 3: Store token
       localStorage.setItem("token", result.token);
       localStorage.setItem("role", result?.user?.role);
+      localStorage.setItem("userId", result?.user?.id);
 
       // ✅ Step 4: Redirect
       toast.success("Login successful"); //
